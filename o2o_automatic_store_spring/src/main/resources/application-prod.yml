@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mariadb://${prod-db.host}:${prod-db.port}/${prod-db.name}?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: ${prod-db.username}
+    password: ${prod-db.password}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  flask:
+    base-url: ${prod-db.flaskUrl}

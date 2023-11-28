@@ -1,0 +1,18 @@
+erver:
+  port: 8080
+
+spring:
+  config:
+    import: classpath:application-db.yml
+
+  datasource:
+    url: jdbc:mariadb://${local-db.host}:${local-db.port}/${local-db.name}?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: ${local-db.username}
+    password: ${local-db.password}
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+  flask:
+    base-url: ${local-db.flaskUrl}

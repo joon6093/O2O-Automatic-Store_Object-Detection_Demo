@@ -1,0 +1,12 @@
+# Local(로컬 환경, default), Dev(개발 환경), Prod(운영 환경)
+# ex))))) java -jar test-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+
+# 기본값은 local 프로필으로 설정
+spring:
+  profiles:
+    default: local
+---
+spring:
+  config:
+    activate:
+      on-profile: local, prod
