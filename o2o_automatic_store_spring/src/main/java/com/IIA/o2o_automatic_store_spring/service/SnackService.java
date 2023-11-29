@@ -79,7 +79,7 @@ public class SnackService {
                 Arrays.stream(snackDtos)
                         .map(dto -> Snack.builder()
                                 .filename(dto.getFilename())
-                                .objectName(dto.getObjectName())
+                                .objectName(dto.getObject_name())
                                 .position(new Position(dto.getPosition().getX1(), dto.getPosition().getX2(), dto.getPosition().getY1(), dto.getPosition().getY2()))
                                 .build())
                         .collect(Collectors.toList())

@@ -1,12 +1,10 @@
 package com.IIA.o2o_automatic_store_spring.entity;
 
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 @Embeddable
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Position {

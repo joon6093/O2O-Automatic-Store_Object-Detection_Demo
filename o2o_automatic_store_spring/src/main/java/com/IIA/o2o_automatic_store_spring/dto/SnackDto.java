@@ -10,7 +10,7 @@ public class SnackDto {
     private String filename;
 
     @NotBlank(message = "Object name cannot be blank")
-    private String objectName;
+    private String object_name;
 
     @NotNull(message = "Position cannot be null")
     private PositionDto position;

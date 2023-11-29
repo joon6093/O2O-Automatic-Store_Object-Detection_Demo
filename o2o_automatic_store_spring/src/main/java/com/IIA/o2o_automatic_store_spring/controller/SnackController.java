@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -31,8 +32,8 @@ public class SnackController {
     }
 
     @PostMapping("/snacks/analyze")
-    public ResponseEntity<MessageDto> analyzeSnacks(@RequestParam("images") List<MultipartFile> images) {
-        List<Snack> snacks = snackService.analyzeSnacks(images);
+    public ResponseEntity<MessageDto> analyzeSnacks(@RequestParam("images") MultipartFile[] images) {
+        List<Snack> snacks = snackService.analyzeSnacks(Arrays.asList(images));
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new MessageDto(StatusEnum.OK, "Snack analysis completed successfully", snacks));
     }
