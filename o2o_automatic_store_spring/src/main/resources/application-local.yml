@@ -19,3 +19,6 @@ spring:
 
   flask:
     base-url: ${local-db.flaskUrl}
+
+project:
+  imagePath: "image/"

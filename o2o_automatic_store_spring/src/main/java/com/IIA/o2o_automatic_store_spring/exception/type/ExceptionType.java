@@ -6,6 +6,9 @@ import lombok.Getter;
 public enum ExceptionType {
     EXCEPTION("exception.code", "exception.msg"),
     BIND_EXCEPTION("bindException.code", "bindException.msg"),
+    SNACK_NOT_FOUND_EXCEPTION("snackNotFoundException.code", "snackNotFoundException.msg"),
+    IMAGE_READ_EXCEPTION("imageReadException.code", "imageReadException.msg"),
+    NULL_RESPONSE_FROM_API_EXCEPTION("nullResponseFromApiException.code", "nullResponseFromApiException.msg"),
     IMAGE_UPLOAD_FAILURE_EXCEPTION("imageUploadFailureException.code", "imageUploadFailureException.msg");
 
     private final String code;

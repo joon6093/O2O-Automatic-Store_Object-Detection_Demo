@@ -1,10 +1,14 @@
 package com.IIA.o2o_automatic_store_spring.dto.snack;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SnackDto {
     @NotBlank(message = "Filename cannot be blank")
     private String filename;
