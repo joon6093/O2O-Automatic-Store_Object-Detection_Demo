@@ -1,4 +1,4 @@
-package com.IIA.o2o_automatic_store_spring.component;
+package com.IIA.o2o_automatic_store_spring.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -10,7 +10,7 @@ import java.sql.Connection;
 
 @RequiredArgsConstructor
 @Component
-public class MariaDBRunner implements ApplicationRunner {
+public class MariaDBConfig implements ApplicationRunner {
     private final DataSource dataSource;
 
     @Override

@@ -6,9 +6,9 @@ spring:
     import: classpath:application-db.yml
 
   datasource:
-    url: jdbc:mariadb://${local-db.host}:${local-db.port}/${local-db.name}?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=utf8
-    username: ${local-db.username}
-    password: ${local-db.password}
+    url: jdbc:mariadb://${dev-db.host}:${dev-db.port}/${dev-db.name}?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=utf8
+    username: ${dev-db.username}
+    password: ${dev-db.password}
 
   jpa:
     properties:
@@ -18,4 +18,4 @@ spring:
         hbm2ddl.auto: create-drop
 
   flask:
-    base-url: ${local-db.flaskUrl}
+    base-url: ${dev-db.flaskUrl}

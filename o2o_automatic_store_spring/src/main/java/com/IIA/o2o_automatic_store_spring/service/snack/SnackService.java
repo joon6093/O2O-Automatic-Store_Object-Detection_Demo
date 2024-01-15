@@ -1,10 +1,10 @@
-package com.IIA.o2o_automatic_store_spring.service;
+package com.IIA.o2o_automatic_store_spring.service.snack;
 
 
-import com.IIA.o2o_automatic_store_spring.dto.SnackDto;
-import com.IIA.o2o_automatic_store_spring.entity.Position;
-import com.IIA.o2o_automatic_store_spring.entity.Snack;
-import com.IIA.o2o_automatic_store_spring.repository.SnackRepository;
+import com.IIA.o2o_automatic_store_spring.dto.snack.SnackDto;
+import com.IIA.o2o_automatic_store_spring.entity.snack.Position;
+import com.IIA.o2o_automatic_store_spring.entity.snack.Snack;
+import com.IIA.o2o_automatic_store_spring.repository.snack.SnackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -35,7 +35,7 @@ public class SnackService {
         return snackRepository.findAll();
     }
 
-    public Snack findById(Long id) {
+    public Snack findSnack(Long id) {
         return snackRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Snack not found with id: " + id));
     }

@@ -1,4 +1,4 @@
-package com.IIA.o2o_automatic_store_spring.dto;
+package com.IIA.o2o_automatic_store_spring.dto.snack;
 
 import lombok.Data;
 import jakarta.validation.constraints.NotBlank;

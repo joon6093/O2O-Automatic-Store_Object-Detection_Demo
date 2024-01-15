@@ -1,4 +1,4 @@
-package com.IIA.o2o_automatic_store_spring.entity;
+package com.IIA.o2o_automatic_store_spring.entity.snack;
 
 import jakarta.persistence.Embeddable;
 import lombok.*;

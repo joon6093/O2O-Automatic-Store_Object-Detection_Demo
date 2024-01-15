@@ -22,14 +22,27 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// Spring Boot Starter Dependencies
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA
+	implementation 'org.springframework.boot:spring-boot-starter-web' // Web
+
+	// Lombok - Simplify Java code
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Database
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	// JWT - JSON Web Token
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	// XML and Validation
+	implementation 'javax.xml.bind:jaxb-api:2.3.1' // XML Binding
+	implementation 'org.springframework.boot:spring-boot-starter-validation' // Validation
+
+	// Test Dependencies
+	testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot Test
+	testImplementation 'org.projectlombok:lombok:1.18.28' // Lombok for testing
 }
 
 tasks.named('test') {
