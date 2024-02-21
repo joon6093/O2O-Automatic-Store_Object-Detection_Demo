@@ -53,10 +53,9 @@ def imread(filename, flags=cv2.IMREAD_COLOR, dtype=np.uint8):
         print(e) 
         return None
 
-@app.route('/test', methods=['GET'])
-def test():
-    text = "This is Flask Server Test"
-    return text
+@app.route('/health-check', methods=['GET'])
+def health_check():
+    return jsonify({"status": "healthy"}), 200
 
 @app.route('/detect', methods=['POST'])
 def detect():
