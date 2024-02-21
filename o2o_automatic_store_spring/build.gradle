@@ -43,6 +43,12 @@ dependencies {
 	// Test Dependencies
 	testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot Test
 	testImplementation 'org.projectlombok:lombok:1.18.28' // Lombok for testing
+
+	// Spring Boot WebFlux
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// Spring Boot Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
