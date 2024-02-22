@@ -5,6 +5,7 @@ import com.IIA.o2o_automatic_store_springmvc_java.dto.snack.SnackDto;
 import com.IIA.o2o_automatic_store_springmvc_java.entity.snack.Position;
 import com.IIA.o2o_automatic_store_springmvc_java.entity.snack.Snack;
 import com.IIA.o2o_automatic_store_springmvc_java.exception.ImageReadException;
+import com.IIA.o2o_automatic_store_springmvc_java.exception.NullResponseFromApiException;
 import com.IIA.o2o_automatic_store_springmvc_java.exception.SnackNotFoundException;
 import com.IIA.o2o_automatic_store_springmvc_java.repository.snack.SnackRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.List;
@@ -68,6 +71,7 @@ public class SnackService {
                 .body(BodyInserters.fromMultipartData(body))
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<SnackDto>>() {})
+                .onErrorResume(WebClientRequestException.class, e -> Mono.error(new NullResponseFromApiException()))
                 .block();
 
         List<Snack> snacks = snackDtos.stream()
