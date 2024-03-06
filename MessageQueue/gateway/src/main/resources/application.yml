@@ -1,1 +1,41 @@
+server:
+  port: 8000
 
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: object-detection
+          uri: lb://OBJECT-DETECTION
+          predicates:
+            - Path=/object-detection/**
+          filters:
+            - RewritePath=/object-detection/(?<segment>.*), /$\{segment}
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: info, health, httpexchanges
+    jmx:
+      exposure:
+        exclude: '*'
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    httpexchanges:
+      enabled: true
