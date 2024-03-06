@@ -1,8 +1,14 @@
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 import json
+from py_eureka_client import eureka_client
 
 app = Flask(__name__)
+
+def register_service_to_eureka():
+    eureka_client.init(eureka_server="http://127.0.0.1:8761/eureka/",
+                       app_name="object-detection",
+                       instance_port=5000)
 
 def load_demo_results():
     with open('demo_results.json') as f:
@@ -32,4 +38,5 @@ def detect():
     return jsonify(results)
 
 if __name__ == '__main__':
+    register_service_to_eureka()
     app.run(debug=True, host='0.0.0.0', port=5000)
