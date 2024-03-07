@@ -1,0 +1,77 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.3'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.IIA'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2023.0.0")
+}
+
+dependencies {
+	// Spring Web MVC를 위한 스타터
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// Netflix Eureka 클라이언트 지원
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+	// 스프링 부트의 Bean Validation 지원
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// JPA를 사용한 데이터 접근 지원
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// 스프링 시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// JSON Web Token (JWT) 지원 라이브러리
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+	// Kafka 스타터
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	// 스프링 부트 Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// MariaDB
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// 스프링 부트 테스트 지원
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// 스프링 시큐리티 테스트 지원
+	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
