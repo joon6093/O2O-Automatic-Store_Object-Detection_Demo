@@ -20,8 +20,8 @@ public class ResponseHandler {
         return Response.failure(getCode(exceptionType.getCode()), getMessage(exceptionType.getMessage(), args));
     }
 
-    private Integer getCode(String key) {
-        return Integer.valueOf(messageSource.getMessage(key, null, LocaleContextHolder.getLocale()));
+    private String getCode(String key) {
+        return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
     }
 
     private String getMessage(String key) {

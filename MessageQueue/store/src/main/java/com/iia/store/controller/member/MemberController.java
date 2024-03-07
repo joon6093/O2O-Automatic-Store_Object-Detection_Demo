@@ -16,14 +16,14 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/api/members/{id}")
+    @GetMapping("/members/{id}")
     public ResponseEntity<Response> read(@PathVariable(name = "id")Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(Response.success(memberService.read(id)));
     }
 
-    @DeleteMapping("/api/members/{id}")
+    @DeleteMapping("/members/{id}")
     public ResponseEntity<Response> delete(@PathVariable(name = "id")Long id) {
         memberService.delete(id);
         return ResponseEntity

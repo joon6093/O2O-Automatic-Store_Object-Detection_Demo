@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class SignController {
     private final SignService signService;
 
-    @PostMapping("/api/sign-up")
+    @PostMapping("/sign-up")
     public ResponseEntity<Response> signUp(@Valid @RequestBody SignUpRequest req) {
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(signService.signUp(req)));
     }
 
-    @PostMapping("/api/sign-in")
+    @PostMapping("/sign-in")
     public ResponseEntity<Response> signIn(@Valid @RequestBody SignInRequest req) {
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(signService.signIn(req)));
     }
 
-    @PostMapping("/api/refresh-token")
+    @PostMapping("/refresh-token")
     public ResponseEntity<Response> refreshToken(@RequestHeader(value = "Authorization") String refreshToken) {
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(signService.refreshToken(refreshToken)));
     }

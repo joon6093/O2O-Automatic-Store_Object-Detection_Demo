@@ -16,9 +16,10 @@ public enum ExceptionType {
     MISSING_REQUEST_HEADER_EXCEPTION("missingRequestHeaderException.code", "missingRequestHeaderException.msg"),
     EXPIRED_JWT_EXCEPTION("expiredJwtException.code", "expiredJwtException.msg"),
     UNSUPPORTED_IMAGE_FORMAT_EXCEPTION("unsupportedImageFormatException.code", "unsupportedImageFormatException.msg"),
-    FILE_UPLOAD_FAILURE_EXCEPTION("fileUploadFailureException.code", "fileUploadFailureException.msg"),
-    FILE_DELETE_FAILURE_EXCEPTION("fileDeleteFailureException.code", "fileDeleteFailureException.msg"),
-    REFRESH_TOKEN_FAILURE_EXCEPTION("refreshTokenFailureException.code", "refreshTokenFailureException.msg");
+    IMAGE_UPLOAD_FAILURE_EXCEPTION("imageUploadFailureException.code", "imageUploadFailureException.msg"),
+    IMAGE_DELETE_FAILURE_EXCEPTION("imageDeleteFailureException.code", "imageDeleteFailureException.msg"),
+    REFRESH_TOKEN_FAILURE_EXCEPTION("refreshTokenFailureException.code", "refreshTokenFailureException.msg"),
+    STORE_NOT_FOUND_EXCEPTION("storeNotFoundException.code", "storeNotFoundException.msg");
 
     private final String code;
     private final String message;

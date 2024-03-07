@@ -1,11 +1,11 @@
 package com.iia.store.config.exception.advice;
 
 import com.iia.store.config.exception.*;
-import com.iia.store.config.exception.response.ResponseHandler;
 import com.iia.store.config.response.Response;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.iia.store.config.exception.response.ResponseHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.iia.store.config.exception.type.ExceptionType.*;
+import static com.iia.store.config.exception.type.ExceptionType.IMAGE_DELETE_FAILURE_EXCEPTION;
 
 
 @RestControllerAdvice
@@ -94,23 +95,30 @@ public class ExceptionAdvice {
                 .body(responseHandler.getFailureResponse(UNSUPPORTED_IMAGE_FORMAT_EXCEPTION));
     }
 
-    @ExceptionHandler(FileUploadFailureException.class)
-    public ResponseEntity<Response> fileUploadFailureException(FileUploadFailureException e) {
+    @ExceptionHandler(ImageUploadFailureException.class)
+    public ResponseEntity<Response> imageUploadFailureException(ImageUploadFailureException e) {
         log.info("e = {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(responseHandler.getFailureResponse(FILE_UPLOAD_FAILURE_EXCEPTION));
+                .body(responseHandler.getFailureResponse(IMAGE_UPLOAD_FAILURE_EXCEPTION));
     }
 
-    @ExceptionHandler(FileDeleteFailureException.class)
-    public ResponseEntity<Response> fileDeleteFailureException() {
+    @ExceptionHandler(ImageDeleteFailureException.class)
+    public ResponseEntity<Response> imageDeleteFailureException() {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(responseHandler.getFailureResponse(FILE_DELETE_FAILURE_EXCEPTION));
+                .body(responseHandler.getFailureResponse(IMAGE_DELETE_FAILURE_EXCEPTION));
     }
 
     @ExceptionHandler(RefreshTokenFailureException.class)
     public ResponseEntity<Response> refreshTokenFailureException() {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(responseHandler.getFailureResponse(REFRESH_TOKEN_FAILURE_EXCEPTION));
+    }
+
+    @ExceptionHandler(StoreNotFoundException.class)
+    public ResponseEntity<Response> storeNotFoundException() {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(responseHandler.getFailureResponse(REFRESH_TOKEN_FAILURE_EXCEPTION));

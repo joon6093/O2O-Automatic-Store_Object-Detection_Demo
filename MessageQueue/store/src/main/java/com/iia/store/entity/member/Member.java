@@ -32,7 +32,7 @@ public class Member extends EntityDate {
     @Column(nullable = false, length = 20, unique = true)
     private String nickname;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL , orphanRemoval = true)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL , orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<MemberRole> roles;
 
     @Builder
@@ -42,9 +42,5 @@ public class Member extends EntityDate {
         this.username = username;
         this.nickname = nickname;
         this.roles = roles.stream().map(r -> new MemberRole(this, r)).collect(toSet());
-    }
-
-    public void updateNickname(String nickname) {
-        this.nickname = nickname;
     }
 }
