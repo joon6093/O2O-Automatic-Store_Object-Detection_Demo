@@ -42,9 +42,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	// JSON Web Token (JWT) 지원 라이브러리
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
-	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
-	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	// XML Binding
+	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
 
 	// Kafka 스타터
 	implementation 'org.springframework.kafka:spring-kafka'

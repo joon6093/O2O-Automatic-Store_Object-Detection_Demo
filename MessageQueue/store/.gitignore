@@ -36,5 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 
-### DB ###
-application-db.yml
+### Database ###
+db.yml
+
+### Token
+token.yml

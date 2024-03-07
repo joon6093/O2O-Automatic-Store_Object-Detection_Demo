@@ -6,12 +6,16 @@ spring:
     name: store
 
   config:
-    import: classpath:application-db.yml
+    import: classpath:db.yml, classpath:token.yml
 
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
+  messages:
+    basename: i18n/exception,i18n/validation
+    fallback-to-system-locale: false        # ??????? ??? ?? ???? ??
 
   datasource:
     url: jdbc:mariadb://${local-db.host}:${local-db.port}/${local-db.name}?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=utf8
@@ -49,3 +53,6 @@ management:
     health:
       enabled: true
 
+upload:
+  image:
+    location: images/

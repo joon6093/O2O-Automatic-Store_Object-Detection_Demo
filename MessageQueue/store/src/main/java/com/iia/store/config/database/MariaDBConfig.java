@@ -1,4 +1,4 @@
-package com.iia.store.config;
+package com.iia.store.config.database;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
