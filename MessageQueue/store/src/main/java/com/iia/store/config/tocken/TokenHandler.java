@@ -15,14 +15,14 @@ public class TokenHandler {
     private final JwtHandler jwtHandler;
     private final String key;
     private final long maxAgeSeconds;
-    private static final String MEMBER_ID = "MEMBER_ID";
-    private static final String ROLE_TYPES = "ROLE_TYPES";
-    private static final String SEP = ",";
+    private final String ID;
+    private final String ROLE_TYPES;
+    private final String SEP;
 
     public String createToken(PrivateClaims privateClaims) {
         return jwtHandler.createToken(
                 key,
-                Map.of(MEMBER_ID, privateClaims.getMemberId(), ROLE_TYPES, String.join(SEP, privateClaims.getRoleTypes())),
+                Map.of(ID, privateClaims.getId(), ROLE_TYPES, String.join(SEP, privateClaims.getRoleTypes())),
                 maxAgeSeconds
         );
     }
@@ -31,9 +31,13 @@ public class TokenHandler {
         return jwtHandler.parse(key, token).map(claims -> convert(claims));
     }
 
+    public Optional<PrivateClaims> parseExpiredToken(String token) {
+        return jwtHandler.parseExpiredToken(key, token).map(claims -> convert(claims));
+    }
+
     private PrivateClaims convert(Claims claims) {
         return new PrivateClaims(
-                claims.get(MEMBER_ID, String.class),
+                claims.get(ID, String.class),
                 Arrays.asList(claims.get(ROLE_TYPES, String.class).split(SEP))
         );
     }
@@ -41,7 +45,7 @@ public class TokenHandler {
     @Getter
     @AllArgsConstructor
     public static class PrivateClaims {
-        private String memberId;
+        private String id;
         private List<String> roleTypes;
     }
 }

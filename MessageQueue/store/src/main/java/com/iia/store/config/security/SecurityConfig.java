@@ -18,7 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtUserAuthenticationFilter jwtUserAuthenticationFilter;
+    private final JwtStoreAuthenticationFilter jwtStoreAuthenticationFilter;
     private final ExpiredJwtExceptionFilter expiredJwtExceptionFilter;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -34,12 +35,17 @@ public class SecurityConfig {
                 .exceptionHandling((exceptionConfig) ->
                         exceptionConfig.authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(customAccessDeniedHandler)
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(expiredJwtExceptionFilter, JwtAuthenticationFilter.class)
+                .addFilterBefore(jwtStoreAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtUserAuthenticationFilter, JwtStoreAuthenticationFilter.class)
+                .addFilterBefore(expiredJwtExceptionFilter, JwtUserAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize ->
                         authorize
-                        .requestMatchers(HttpMethod.POST, "/api/sign-in", "/api/sign-up","/api/refresh-token").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/**","/image/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/sign-in", "/sign-up","/refresh-token").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/members/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/stores","/stores/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/stores/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/stores/sign-in").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.GET).permitAll()
                         .anyRequest().hasAnyRole("ADMIN"));
         return http.build();
     }

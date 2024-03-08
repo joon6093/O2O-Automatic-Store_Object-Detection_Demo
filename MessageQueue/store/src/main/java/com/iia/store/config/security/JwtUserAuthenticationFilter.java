@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtUserAuthenticationFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService userDetailsService;
 
     @Override

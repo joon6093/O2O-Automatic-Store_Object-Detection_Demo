@@ -10,16 +10,16 @@ import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 
 @Component
-public class CustomUserDetailsService implements UserDetailsService {
-    private final TokenHandler userAccessTokenHandler;
+public class CustomStoreDetailsService implements UserDetailsService {
+    private final TokenHandler storeAccessTokenHandler;
 
-    public CustomUserDetailsService(@Qualifier("userAccessTokenHandler") TokenHandler userAccessTokenHandler) {
-        this.userAccessTokenHandler = userAccessTokenHandler;
+    public CustomStoreDetailsService(@Qualifier("storeAccessTokenHandler") TokenHandler storeAccessTokenHandler) {
+        this.storeAccessTokenHandler = storeAccessTokenHandler;
     }
 
     @Override
     public CustomUserDetails loadUserByUsername(String token) throws UsernameNotFoundException {
-        CustomUserDetails customUserDetails = userAccessTokenHandler.parse(token)
+        CustomUserDetails customUserDetails = storeAccessTokenHandler.parse(token)
                 .map(privateClaims -> convert(privateClaims))
                 .orElse(null);
         return customUserDetails;

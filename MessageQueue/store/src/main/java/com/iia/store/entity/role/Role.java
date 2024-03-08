@@ -1,4 +1,4 @@
-package com.iia.store.entity.member;
+package com.iia.store.entity.role;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

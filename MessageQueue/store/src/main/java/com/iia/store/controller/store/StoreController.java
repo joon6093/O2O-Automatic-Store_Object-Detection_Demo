@@ -2,9 +2,8 @@ package com.iia.store.controller.store;
 
 import com.iia.store.config.aop.AssignMemberId;
 import com.iia.store.config.response.Response;
-import com.iia.store.dto.store.StoreCreateRequest;
-import com.iia.store.dto.store.StoreDto;
-import com.iia.store.dto.store.StoreListDto;
+import com.iia.store.dto.sign.UserRefreshTokenResponse;
+import com.iia.store.dto.store.*;
 import com.iia.store.service.store.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ public class StoreController {
 
     @AssignMemberId
     @PostMapping("/stores")
-    public ResponseEntity<Response> create(@Valid @RequestBody StoreCreateRequest req) {
+    public ResponseEntity<Response> create(@Valid @ModelAttribute  StoreCreateRequest req) {
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(storeService.create(req)));
     }
 
@@ -30,10 +29,24 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.OK).body(Response.success());
     }
 
-    @GetMapping("/stores/member/{id}")
-    public ResponseEntity<Response> readByMember(@PathVariable(name = "id") Long id) {
-        StoreListDto stores = storeService.readByMember(id);
+    @AssignMemberId
+    @GetMapping("/stores/sign-in")
+    public ResponseEntity<Response> readBySignIn(@Valid StoreReadBySignInrRequest req) {
+        StoreListDto stores = storeService.readBySignIn(req.getMemberId());
         return ResponseEntity.ok(Response.success(stores));
+    }
+
+    @AssignMemberId
+    @PostMapping("/stores/select")
+    public ResponseEntity<Response> storeSelect(@Valid @RequestBody StoreSelectRequest req) {
+        StoreSelectResponse response = storeService.storeSelect(req);
+        return ResponseEntity.ok(Response.success(response));
+    }
+
+    @PostMapping("/stores/refresh-token")
+    public ResponseEntity<Response> refreshStoreToken(@Valid @RequestBody StoreRefreshTokenRequest req) {
+        StoreRefreshTokenResponse response = storeService.refreshStoreToken(req);
+        return ResponseEntity.ok(Response.success(response));
     }
 
     @GetMapping("/stores")

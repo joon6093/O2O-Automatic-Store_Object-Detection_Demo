@@ -123,4 +123,11 @@ public class ExceptionAdvice {
                 .status(HttpStatus.NOT_FOUND)
                 .body(responseHandler.getFailureResponse(REFRESH_TOKEN_FAILURE_EXCEPTION));
     }
+
+    @ExceptionHandler(SelectStoreFailureException.class)
+    public ResponseEntity<Response> selectStoreFailureException() {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(responseHandler.getFailureResponse(SELECT_STORE_FAILURE_EXCEPTION));
+    }
 }

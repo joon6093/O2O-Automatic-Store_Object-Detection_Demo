@@ -1,11 +1,10 @@
-package com.iia.store.dto.sign;
+package com.iia.store.dto.store;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SignInResponse {
+public class StoreRefreshTokenResponse {
     private String userAccessToken;
-    private String userRefreshToken;
 }

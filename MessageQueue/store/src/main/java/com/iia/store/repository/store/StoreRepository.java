@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface StoreRepository extends JpaRepository<Store, Long>{
 
     List<Store> findByMemberId(Long memberId);
-
+    Optional<Store> findByIdAndMemberId(Long storeId, Long memberId);
     @Query("SELECT s FROM Store s JOIN FETCH s.member LEFT JOIN FETCH s.image WHERE s.id = :id")
     Optional<Store> findByIdWithMemberAndImage(Long id);
 

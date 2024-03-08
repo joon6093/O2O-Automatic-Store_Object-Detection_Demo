@@ -1,6 +1,7 @@
 package com.iia.store.entity.member;
 
 import com.iia.store.entity.common.EntityDate;
+import com.iia.store.entity.role.Role;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,11 +1,10 @@
 package com.iia.store.service.member;
 
+import com.iia.store.config.exception.MemberNotFoundException;
 import com.iia.store.dto.member.MemberDto;
 import com.iia.store.entity.member.Member;
-import com.iia.store.config.exception.MemberNotFoundException;
 import com.iia.store.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,17 +16,11 @@ public class MemberService {
 
     public MemberDto read(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
-        return MemberDto.builder()
-                .id(member.getId())
-                .email(member.getEmail())
-                .username(member.getUsername())
-                .nickname(member.getNickname())
-                .createdAt(member.getCreatedAt())
-                .build();
+        return new MemberDto(member.getId(),member.getEmail(), member.getUsername(), member.getNickname(), member.getCreatedAt());
     }
 
     @Transactional
-    public void delete(@Param("id")Long id) {
+    public void delete(Long id) { // Todo. refresh token 을 이용한 블랙 리스트 처리 필요
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
         memberRepository.delete(member);
     }

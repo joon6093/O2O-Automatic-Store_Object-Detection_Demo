@@ -19,7 +19,8 @@ public enum ExceptionType {
     IMAGE_UPLOAD_FAILURE_EXCEPTION("imageUploadFailureException.code", "imageUploadFailureException.msg"),
     IMAGE_DELETE_FAILURE_EXCEPTION("imageDeleteFailureException.code", "imageDeleteFailureException.msg"),
     REFRESH_TOKEN_FAILURE_EXCEPTION("refreshTokenFailureException.code", "refreshTokenFailureException.msg"),
-    STORE_NOT_FOUND_EXCEPTION("storeNotFoundException.code", "storeNotFoundException.msg");
+    STORE_NOT_FOUND_EXCEPTION("storeNotFoundException.code", "storeNotFoundException.msg"),
+    SELECT_STORE_FAILURE_EXCEPTION("selectStoreFailureException.code", "selectStoreFailureException.msg");
 
     private final String code;
     private final String message;

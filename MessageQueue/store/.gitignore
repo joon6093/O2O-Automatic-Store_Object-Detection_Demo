@@ -39,5 +39,8 @@ out/
 ### Database ###
 db.yml
 
-### Token
+### Token ###
 token.yml
+
+### Image ###
+image/

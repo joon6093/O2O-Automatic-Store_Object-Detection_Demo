@@ -1,21 +1,18 @@
 package com.iia.store.service.sign;
 
-import com.iia.store.config.exception.LoginFailureException;
-import com.iia.store.config.exception.MemberEmailAlreadyExistsException;
-import com.iia.store.config.exception.MemberNicknameAlreadyExistsException;
-import com.iia.store.config.exception.RefreshTokenFailureException;
-import com.iia.store.config.exception.RoleNotFoundException;
+import com.iia.store.config.exception.*;
 import com.iia.store.config.tocken.TokenHandler;
 import com.iia.store.dto.sign.*;
 import com.iia.store.entity.member.Member;
-import com.iia.store.entity.member.Role;
-import com.iia.store.entity.member.RoleType;
+import com.iia.store.entity.role.Role;
+import com.iia.store.entity.role.RoleType;
 import com.iia.store.repository.member.MemberRepository;
 import com.iia.store.repository.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,21 +22,21 @@ public class SignService {
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenHandler accountAccessTokenHandler;
-    private final TokenHandler accountRefreshTokenHandler;
+    private final TokenHandler userAccessTokenHandler;
+    private final TokenHandler userRefreshTokenHandler;
 
-    public SignService(MemberRepository memberRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, @Qualifier("accountAccessTokenHandler") TokenHandler accessTokenHelper, @Qualifier("accountRefreshTokenHandler") TokenHandler refreshTokenHelper) {
+    public SignService(MemberRepository memberRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, @Qualifier("userAccessTokenHandler") TokenHandler userAccessTokenHandler, @Qualifier("userRefreshTokenHandler") TokenHandler userRefreshTokenHandler) {
         this.memberRepository = memberRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.accountAccessTokenHandler = accessTokenHelper;
-        this.accountRefreshTokenHandler = refreshTokenHelper;
+        this.userAccessTokenHandler = userAccessTokenHandler;
+        this.userRefreshTokenHandler = userRefreshTokenHandler;
     }
 
     @Transactional
     public SignUpResponse signUp(SignUpRequest req) {
         validateSignUpInfo(req);
-        Role role = roleRepository.findByRoleType(RoleType.ROLE_NORMAL).orElseThrow(RoleNotFoundException::new);
+        Role role = roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(RoleNotFoundException::new);
         Member member = Member.builder()
                         .email(req.getEmail())
                         .password(passwordEncoder.encode(req.getPassword()))
@@ -63,8 +60,8 @@ public class SignService {
         Member member = memberRepository.findWithRolesByEmail(req.getEmail()).orElseThrow(LoginFailureException::new);
         validatePassword(req, member);
         TokenHandler.PrivateClaims privateClaims = createPrivateClaims(member);
-        String accessToken = accountAccessTokenHandler.createToken(privateClaims);
-        String refreshToken = accountRefreshTokenHandler.createToken(privateClaims);
+        String accessToken = userAccessTokenHandler.createToken(privateClaims);
+        String refreshToken = userRefreshTokenHandler.createToken(privateClaims);
         return new SignInResponse(accessToken, refreshToken);
     }
 
@@ -84,9 +81,9 @@ public class SignService {
                         .collect(Collectors.toList()));
     }
 
-    public RefreshTokenResponse refreshToken(String rToken) {
-        TokenHandler.PrivateClaims privateClaims = accountRefreshTokenHandler.parse(rToken).orElseThrow(RefreshTokenFailureException::new);
-        String accessToken = accountAccessTokenHandler.createToken(privateClaims);
-        return new RefreshTokenResponse(accessToken);
+    public UserRefreshTokenResponse refreshToken(String accountRefreshToken) {
+        TokenHandler.PrivateClaims accountClaims = userRefreshTokenHandler.parse(accountRefreshToken).orElseThrow(RefreshTokenFailureException::new);
+        String accountAccessToken = userAccessTokenHandler.createToken(accountClaims);
+        return new UserRefreshTokenResponse(accountAccessToken);
     }
 }

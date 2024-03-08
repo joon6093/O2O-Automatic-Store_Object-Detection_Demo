@@ -15,7 +15,7 @@ spring:
 
   messages:
     basename: i18n/exception,i18n/validation
-    fallback-to-system-locale: false        # ??????? ??? ?? ???? ??
+    fallback-to-system-locale: false
 
   datasource:
     url: jdbc:mariadb://${local-db.host}:${local-db.port}/${local-db.name}?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=utf8
@@ -25,8 +25,8 @@ spring:
   jpa:
     properties:
       hibernate:
-        format_sql: true            # SQL ?? ?? ??
-        highlight_sql: true         # SQL ??
+        format_sql: true
+        highlight_sql: true
         hbm2ddl.auto: create-drop
 
 eureka:

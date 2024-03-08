@@ -1,4 +1,4 @@
-package com.iia.store.entity.member;
+package com.iia.store.entity.store;
 
 import com.iia.store.entity.role.Role;
 import jakarta.persistence.Embeddable;
@@ -11,9 +11,9 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class MemberRoleId implements Serializable {
+public class StoreRoleId implements Serializable {
 
-    private Member member;
+    private Store store;
     private Role role;
 
 }

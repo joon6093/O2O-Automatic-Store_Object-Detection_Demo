@@ -1,4 +1,4 @@
-package com.iia.store.entity.member;
+package com.iia.store.entity.store;
 
 import com.iia.store.entity.role.Role;
 import jakarta.persistence.*;
@@ -9,13 +9,13 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode
-@IdClass(MemberRoleId.class)
-public class MemberRole {
+@IdClass(StoreRoleId.class)
+public class StoreRole {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member  member;
+    @JoinColumn(name = "store_id")
+    private Store store;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

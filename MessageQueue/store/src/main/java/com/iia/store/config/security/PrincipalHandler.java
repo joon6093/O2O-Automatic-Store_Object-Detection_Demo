@@ -1,6 +1,6 @@
 package com.iia.store.config.security;
 
-import com.iia.store.entity.member.RoleType;
+import com.iia.store.entity.role.RoleType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
