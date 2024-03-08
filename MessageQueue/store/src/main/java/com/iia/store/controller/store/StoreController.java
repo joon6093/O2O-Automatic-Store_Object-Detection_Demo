@@ -33,31 +33,31 @@ public class StoreController {
     @GetMapping("/stores/sign-in")
     public ResponseEntity<Response> readBySignIn(@Valid StoreReadBySignInrRequest req) {
         StoreListDto stores = storeService.readBySignIn(req.getMemberId());
-        return ResponseEntity.ok(Response.success(stores));
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(stores));
     }
 
     @AssignMemberId
     @PostMapping("/stores/select")
     public ResponseEntity<Response> storeSelect(@Valid @RequestBody StoreSelectRequest req) {
         StoreSelectResponse response = storeService.storeSelect(req);
-        return ResponseEntity.ok(Response.success(response));
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(response));
     }
 
     @PostMapping("/stores/refresh-token")
     public ResponseEntity<Response> refreshStoreToken(@Valid @RequestBody StoreRefreshTokenRequest req) {
         StoreRefreshTokenResponse response = storeService.refreshStoreToken(req);
-        return ResponseEntity.ok(Response.success(response));
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(response));
     }
 
     @GetMapping("/stores")
     public ResponseEntity<Response> readAll() {
         StoreListDto stores = storeService.readAll();
-        return ResponseEntity.ok(Response.success(stores));
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(stores));
     }
 
     @GetMapping("/stores/{id}")
     public ResponseEntity<Response> read(@PathVariable(name = "id") Long id) {
         StoreDto store = storeService.read(id);
-        return ResponseEntity.ok(Response.success(store));
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(store));
     }
 }

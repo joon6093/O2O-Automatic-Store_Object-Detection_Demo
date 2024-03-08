@@ -22,6 +22,7 @@ import static java.util.stream.Collectors.toSet;
 public class Store extends EntityDate {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "store_id")
     private Long id;
 
     @Column(nullable = false, length = 10)

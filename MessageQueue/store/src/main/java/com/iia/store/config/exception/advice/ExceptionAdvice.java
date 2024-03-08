@@ -121,7 +121,7 @@ public class ExceptionAdvice {
     public ResponseEntity<Response> storeNotFoundException() {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(responseHandler.getFailureResponse(REFRESH_TOKEN_FAILURE_EXCEPTION));
+                .body(responseHandler.getFailureResponse(STORE_NOT_FOUND_EXCEPTION));
     }
 
     @ExceptionHandler(SelectStoreFailureException.class)
@@ -129,5 +129,12 @@ public class ExceptionAdvice {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(responseHandler.getFailureResponse(SELECT_STORE_FAILURE_EXCEPTION));
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<Response> productNotFoundException() {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(responseHandler.getFailureResponse(PRODUCT_NOT_FOUND_EXCEPTION));
     }
 }

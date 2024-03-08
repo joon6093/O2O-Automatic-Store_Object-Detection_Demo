@@ -40,7 +40,7 @@ public class StoreService {
 
     @Transactional
     public StoreCreateResponse create(StoreCreateRequest req) {
-        Member member = memberRepository.findById(req.getMemberId()).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findById(req.getMemberId()).orElseThrow(ProductNotFoundException::new);
         Role role = roleRepository.findByRoleType(RoleType.ROLE_NORMAL).orElseThrow(RoleNotFoundException::new);
         StoreImage storeImage = StoreImage.builder()
                 .originName(req.getImage().getOriginalFilename())
@@ -59,8 +59,8 @@ public class StoreService {
         return new StoreCreateResponse(store.getId());
     }
 
-    private void uploadImage(MultipartFile fileImages, StoreImage image) {
-        imageService.upload(fileImages, image.getUniqueName());
+    private void uploadImage(MultipartFile fileImage, StoreImage image) {
+        imageService.upload(fileImage, image.getUniqueName());
     }
 
     @Transactional

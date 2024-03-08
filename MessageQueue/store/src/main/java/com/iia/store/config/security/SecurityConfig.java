@@ -45,6 +45,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/stores","/stores/**").hasAnyRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/stores/**").hasAnyRole("USER","ADMIN")
                         .requestMatchers(HttpMethod.GET, "/stores/sign-in").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("NORMAL","SPECIAL")
+                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasAnyRole("NORMAL","SPECIAL")
+                        .requestMatchers(HttpMethod.PUT, "/products/**").hasAnyRole("NORMAL","SPECIAL")
                         .requestMatchers(HttpMethod.GET).permitAll()
                         .anyRequest().hasAnyRole("ADMIN"));
         return http.build();

@@ -18,16 +18,12 @@ public class MemberController {
 
     @GetMapping("/members/{id}")
     public ResponseEntity<Response> read(@PathVariable(name = "id")Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(Response.success(memberService.read(id)));
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(memberService.read(id)));
     }
 
     @DeleteMapping("/members/{id}")
     public ResponseEntity<Response> delete(@PathVariable(name = "id")Long id) {
         memberService.delete(id);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(Response.success());
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success());
     }
 }
