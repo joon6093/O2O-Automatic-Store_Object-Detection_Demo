@@ -17,8 +17,8 @@ O2O 자동 상점 시스템 구현을 위한 Spring과 YOLOv8기반 Flask로 구
 
 
 ## MessageQueue 방식
-### kafka connect 
-![image](https://github.com/joon6093/O2O-Automatic-Store_Object-Detection_Demo/assets/118044367/42496133-aa67-4d4b-94db-55aa93686488)
+### kafka / kafka connect 
+![image](https://github.com/joon6093/O2O-Automatic-Store_Object-Detection_Demo/assets/118044367/4906053a-962b-428e-bfd5-5a04a819949d)
 
 [Message Queue 적용을 위한 분석](https://velog.io/@joon6093/%EC%9D%BC%EB%8B%A8-%EB%B0%95%EC%A3%A0-O2O-Object-Detection-%EC%84%9C%EB%B2%84-Message-Queue-%EC%A0%81%EC%9A%A9%EC%9D%84-%EC%9C%84%ED%95%9C-%EB%B6%84%EC%84%9D)
 
