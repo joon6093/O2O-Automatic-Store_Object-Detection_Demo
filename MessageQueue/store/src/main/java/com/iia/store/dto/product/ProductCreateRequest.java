@@ -1,7 +1,7 @@
 package com.iia.store.dto.product;
 
+import com.iia.store.config.aop.ValidImageFileList;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -22,7 +21,8 @@ public class ProductCreateRequest {
     @PositiveOrZero(message = "{productCreateRequest.price.positiveOrZero}")
     private double price;
 
-    private List<MultipartFile> images = new ArrayList<>();
+    @ValidImageFileList(message = "{productCreateRequest.images.ValidImage}")
+    private List<MultipartFile> images;
 
     @Null
     private Long storeId;

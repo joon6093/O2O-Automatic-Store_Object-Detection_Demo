@@ -29,6 +29,14 @@ spring:
         highlight_sql: true
         hbm2ddl.auto: create-drop
 
+  kafka:
+    consumer:
+      bootstrap-servers: 127.0.0.1:9092
+      group-id: automaticstore
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+
 eureka:
   instance:
     preferIpAddress: true

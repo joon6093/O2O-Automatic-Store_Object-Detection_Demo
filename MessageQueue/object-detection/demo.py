@@ -78,7 +78,7 @@ def detect():
                 item_summary[item_name] = {'count': 1}
         
         kafka_message = {
-                'store_id': store_id,
+                'store-id': store_id,
                 'items': item_summary
                 }
         try:

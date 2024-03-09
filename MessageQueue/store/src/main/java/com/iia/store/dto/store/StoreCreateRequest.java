@@ -1,5 +1,6 @@
 package com.iia.store.dto.store;
 
+import com.iia.store.config.aop.ValidImageFile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ public class StoreCreateRequest {
     @NotBlank(message = "{storeCreateRequest.description.notBlank}")
     private String description;
 
+    @ValidImageFile(message = "{storeCreateRequest.image.ValidImage}")
     private MultipartFile image;
 
     @Null

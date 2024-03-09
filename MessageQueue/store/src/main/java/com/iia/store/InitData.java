@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Slf4j
 public class InitData {
+
     private final RoleRepository roleRepository;
 
     @EventListener(ApplicationReadyEvent.class)
@@ -27,7 +28,7 @@ public class InitData {
 
     private void initRole() {
         roleRepository.saveAll(
-                Stream.of(RoleType.values()).map(roleType -> new Role(roleType)).collect(Collectors.toList())
+                Stream.of(RoleType.values()).map(Role::new).collect(Collectors.toList())
         );
     }
 }
