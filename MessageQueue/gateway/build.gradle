@@ -35,6 +35,12 @@ dependencies {
 	// Spring Boot Actuator를 위한 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+	// JSON Web Token (JWT) 지원 라이브러리
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	// XML Binding
+	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
+
 	// Lombok 라이브러리
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

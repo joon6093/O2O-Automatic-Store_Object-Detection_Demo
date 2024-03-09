@@ -45,7 +45,12 @@ def health():
 def detect():
     if 'images' not in request.files:
         return 'No images part in the request', 400
-
+    
+    store_id = request.headers.get('Store-ID')
+    if not store_id:
+        return 'Store-ID header is missing', 400
+    
+    print(f"Store-ID: {store_id}")
     images = request.files.getlist('images')
     demo_results = load_demo_results()
     results = []

@@ -13,6 +13,14 @@ eureka:
 spring:
   application:
     name: gateway
+
+  config:
+    import: classpath:token.yml
+
+  messages:
+    basename: i18n/exception
+    fallback-to-system-locale: false
+
   cloud:
     gateway:
       routes:
@@ -22,6 +30,7 @@ spring:
             - Path=/object-detection/**
           filters:
             - RewritePath=/object-detection/(?<segment>.*), /$\{segment}
+            - JwtStoreAuthenticationFilter
 
 management:
   endpoints:

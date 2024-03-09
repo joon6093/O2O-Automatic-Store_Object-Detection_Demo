@@ -1,4 +1,4 @@
-package com.iia.gateway.config;
+package com.iia.gateway.config.actuator;
 
 import org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository;
 import org.springframework.boot.actuate.web.exchanges.InMemoryHttpExchangeRepository;
