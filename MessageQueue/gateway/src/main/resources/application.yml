@@ -31,7 +31,12 @@ spring:
           filters:
             - RewritePath=/object-detection/(?<segment>.*), /$\{segment}
             - JwtStoreAuthenticationFilter
-
+        - id: store
+          uri: lb://store
+          predicates:
+            - Path=/store/**
+          filters:
+            - RewritePath=/store/(?<segment>.*), /$\{segment}
 management:
   endpoints:
     enabled-by-default: false
