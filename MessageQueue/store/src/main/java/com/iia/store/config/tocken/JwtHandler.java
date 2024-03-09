@@ -50,22 +50,6 @@ public class JwtHandler {
         }
     }
 
-    public Optional<Claims> parseExpiredToken(String key, String token) {
-        try {
-            return Optional.of(Jwts.parser()
-                    .setSigningKey(key.getBytes())
-                    .parseClaimsJws(unType(token))
-                    .getBody());
-        } catch (ExpiredJwtException e) {
-            log.warn("Expired JWT token - {}", e.getMessage());
-            return Optional.of(e.getClaims());
-        } catch (JwtException e) {
-            log.warn("JWT error - {}", e.getMessage());
-            return Optional.empty();
-        }
-    }
-
-
     private String unType(String token) {
         if (token != null && token.startsWith(type)) {
             return token.substring(type.length());

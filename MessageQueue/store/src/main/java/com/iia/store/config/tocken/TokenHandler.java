@@ -31,11 +31,7 @@ public class TokenHandler {
         return jwtHandler.parse(key, token).map(claims -> convert(claims));
     }
 
-    public Optional<PrivateClaims> parseExpiredToken(String token) {
-        return jwtHandler.parseExpiredToken(key, token).map(claims -> convert(claims));
-    }
-
-    private PrivateClaims convert(Claims claims) {
+    public PrivateClaims convert(Claims claims) {
         return new PrivateClaims(
                 claims.get(ID, String.class),
                 Arrays.asList(claims.get(ROLE_TYPES, String.class).split(SEP))

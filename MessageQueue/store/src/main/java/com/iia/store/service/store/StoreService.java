@@ -13,6 +13,8 @@ import com.iia.store.repository.member.MemberRepository;
 import com.iia.store.repository.role.RoleRepository;
 import com.iia.store.repository.store.StoreRepository;
 import com.iia.store.service.image.ImageService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,10 +108,18 @@ public class StoreService {
                         .collect(Collectors.toList()));
     }
 
-    public StoreRefreshTokenResponse refreshStoreToken (StoreRefreshTokenRequest req) {
-        TokenHandler.PrivateClaims privateClaims = storeAccessTokenHandler.parseExpiredToken(req.getExpiredStoreToken()).orElseThrow(RefreshTokenFailureException::new);
-        String accessToken = storeAccessTokenHandler.createToken(privateClaims);
-        return new StoreRefreshTokenResponse(accessToken);
+    public StoreRefreshTokenResponse refreshStoreToken(StoreRefreshTokenRequest req) {
+        String expiredStoreToken = req.getExpiredStoreToken();
+        try {
+            TokenHandler.PrivateClaims privateClaims = storeAccessTokenHandler.parse(expiredStoreToken).orElseThrow(RefreshTokenFailureException::new);
+            String newStoreAccessToken = storeAccessTokenHandler.createToken(privateClaims);
+            return new StoreRefreshTokenResponse(newStoreAccessToken);
+        } catch (ExpiredJwtException e) {
+            Claims claims = e.getClaims();
+            TokenHandler.PrivateClaims privateClaims = storeAccessTokenHandler.convert(claims);
+            String newStoreAccessToken = storeAccessTokenHandler.createToken(privateClaims);
+            return new StoreRefreshTokenResponse(newStoreAccessToken);
+        }
     }
 
     public StoreListDto readAll() {
