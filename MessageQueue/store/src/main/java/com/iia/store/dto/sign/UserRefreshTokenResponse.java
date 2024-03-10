@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserRefreshTokenResponse {
     private String userAccessToken;
+    private String userRefreshToken;
 }

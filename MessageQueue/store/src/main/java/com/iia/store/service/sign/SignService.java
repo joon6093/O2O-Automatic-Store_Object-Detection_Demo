@@ -1,5 +1,6 @@
 package com.iia.store.service.sign;
 
+import com.iia.store.config.database.RedisHandler;
 import com.iia.store.config.exception.*;
 import com.iia.store.config.tocken.TokenHandler;
 import com.iia.store.dto.sign.*;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class SignService {
 
     private final MemberRepository memberRepository;
@@ -24,13 +27,17 @@ public class SignService {
     private final PasswordEncoder passwordEncoder;
     private final TokenHandler userAccessTokenHandler;
     private final TokenHandler userRefreshTokenHandler;
+    private final RedisHandler redisHandler;
 
-    public SignService(MemberRepository memberRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, @Qualifier("userAccessTokenHandler") TokenHandler userAccessTokenHandler, @Qualifier("userRefreshTokenHandler") TokenHandler userRefreshTokenHandler) {
+    public SignService(MemberRepository memberRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,
+                       @Qualifier("userAccessTokenHandler") TokenHandler userAccessTokenHandler,
+                       @Qualifier("userRefreshTokenHandler") TokenHandler userRefreshTokenHandler, RedisHandler redisHandler) {
         this.memberRepository = memberRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userAccessTokenHandler = userAccessTokenHandler;
         this.userRefreshTokenHandler = userRefreshTokenHandler;
+        this.redisHandler = redisHandler;
     }
 
     @Transactional
@@ -54,14 +61,14 @@ public class SignService {
         if(memberRepository.existsByNickname(req.getNickname()))
             throw new MemberNicknameAlreadyExistsException(req.getNickname());
     }
-
-    @Transactional(readOnly = true)
+    @Transactional
     public SignInResponse signIn(SignInRequest req) {
         Member member = memberRepository.findWithRolesByEmail(req.getEmail()).orElseThrow(LoginFailureException::new);
         validatePassword(req, member);
         TokenHandler.PrivateClaims privateClaims = createPrivateClaims(member);
         String accessToken = userAccessTokenHandler.createToken(privateClaims);
         String refreshToken = userRefreshTokenHandler.createToken(privateClaims);
+        redisHandler.setValues(String.valueOf(member.getId()), refreshToken);
         return new SignInResponse(accessToken, refreshToken);
     }
 
@@ -81,9 +88,16 @@ public class SignService {
                         .collect(Collectors.toList()));
     }
 
-    public UserRefreshTokenResponse refreshToken(String accountRefreshToken) {
-        TokenHandler.PrivateClaims accountClaims = userRefreshTokenHandler.parse(accountRefreshToken).orElseThrow(RefreshTokenFailureException::new);
-        String accountAccessToken = userAccessTokenHandler.createToken(accountClaims);
-        return new UserRefreshTokenResponse(accountAccessToken);
+    @Transactional
+    public UserRefreshTokenResponse refreshToken(String userRefreshToken) {
+        TokenHandler.PrivateClaims userClaims = userRefreshTokenHandler.parse(userRefreshToken).orElseThrow(RefreshTokenFailureException::new);
+        Optional.ofNullable(redisHandler.getValues(userClaims.getId()))
+                .filter(storedToken -> storedToken.equals(userRefreshToken))
+                .orElseThrow(RefreshTokenFailureException::new);
+
+        String newUserAccessToken = userAccessTokenHandler.createToken(userClaims);
+        String newUserRefreshToken = userAccessTokenHandler.createToken(userClaims);
+        redisHandler.deleteValues(String.valueOf(userClaims.getId()));
+        return new UserRefreshTokenResponse(newUserAccessToken, newUserRefreshToken);
     }
 }
