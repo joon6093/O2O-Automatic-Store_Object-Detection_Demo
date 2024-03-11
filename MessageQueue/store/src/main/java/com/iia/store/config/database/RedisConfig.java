@@ -8,11 +8,6 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
-
-import java.sql.SQLException;
 
 @Configuration
 @EnableRedisRepositories
@@ -35,12 +30,6 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory());
-        redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-        return new JpaTransactionManager();
     }
 }

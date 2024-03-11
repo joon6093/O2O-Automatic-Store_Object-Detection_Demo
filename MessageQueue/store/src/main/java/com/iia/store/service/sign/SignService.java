@@ -90,14 +90,21 @@ public class SignService {
 
     @Transactional
     public UserRefreshTokenResponse refreshToken(String userRefreshToken) {
-        TokenHandler.PrivateClaims userClaims = userRefreshTokenHandler.parse(userRefreshToken).orElseThrow(RefreshTokenFailureException::new);
-        Optional.ofNullable(redisHandler.getValues(userClaims.getId()))
-                .filter(storedToken -> storedToken.equals(userRefreshToken))
+        TokenHandler.PrivateClaims userClaims = userRefreshTokenHandler.parse(userRefreshToken)
+                .orElseThrow(RefreshTokenFailureException::new);
+        String storedToken = Optional.ofNullable(redisHandler.getValues(userClaims.getId()))
                 .orElseThrow(RefreshTokenFailureException::new);
 
+        if (!storedToken.equals(userRefreshToken)) {
+            redisHandler.deleteValues(String.valueOf(userClaims.getId()));
+            throw new RefreshTokenFailureException();
+        }
+
         String newUserAccessToken = userAccessTokenHandler.createToken(userClaims);
-        String newUserRefreshToken = userAccessTokenHandler.createToken(userClaims);
-        redisHandler.deleteValues(String.valueOf(userClaims.getId()));
+        String newUserRefreshToken = userRefreshTokenHandler.createToken(userClaims);
+
+        redisHandler.setValues(String.valueOf(userClaims.getId()), newUserRefreshToken);
+
         return new UserRefreshTokenResponse(newUserAccessToken, newUserRefreshToken);
     }
 }
