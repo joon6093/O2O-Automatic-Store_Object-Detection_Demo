@@ -1,24 +1,27 @@
 package com.iia.store.service.sign;
 
-import com.iia.store.config.database.RedisHandler;
 import com.iia.store.config.exception.*;
-import com.iia.store.config.tocken.TokenHandler;
+import com.iia.store.config.token.TokenHandler;
+import com.iia.store.config.token.TokenStorageUtil;
 import com.iia.store.dto.sign.*;
 import com.iia.store.entity.member.Member;
 import com.iia.store.entity.role.Role;
 import com.iia.store.entity.role.RoleType;
 import com.iia.store.repository.member.MemberRepository;
 import com.iia.store.repository.role.RoleRepository;
+import com.iia.store.service.token.RefreshUserTokenService;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 public class SignService {
 
@@ -27,17 +30,17 @@ public class SignService {
     private final PasswordEncoder passwordEncoder;
     private final TokenHandler userAccessTokenHandler;
     private final TokenHandler userRefreshTokenHandler;
-    private final RedisHandler redisHandler;
+    private final RefreshUserTokenService refreshUserTokenService;
 
     public SignService(MemberRepository memberRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,
                        @Qualifier("userAccessTokenHandler") TokenHandler userAccessTokenHandler,
-                       @Qualifier("userRefreshTokenHandler") TokenHandler userRefreshTokenHandler, RedisHandler redisHandler) {
+                       @Qualifier("userRefreshTokenHandler") TokenHandler userRefreshTokenHandler, RefreshUserTokenService refreshUserTokenService) {
         this.memberRepository = memberRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userAccessTokenHandler = userAccessTokenHandler;
         this.userRefreshTokenHandler = userRefreshTokenHandler;
-        this.redisHandler = redisHandler;
+        this.refreshUserTokenService = refreshUserTokenService;
     }
 
     @Transactional
@@ -61,21 +64,20 @@ public class SignService {
         if(memberRepository.existsByNickname(req.getNickname()))
             throw new MemberNicknameAlreadyExistsException(req.getNickname());
     }
+
     @Transactional
-    public SignInResponse signIn(SignInRequest req) {
+    public void signIn(SignInRequest req,  HttpServletResponse response) {
         Member member = memberRepository.findWithRolesByEmail(req.getEmail()).orElseThrow(LoginFailureException::new);
         validatePassword(req, member);
+
         TokenHandler.PrivateClaims privateClaims = createPrivateClaims(member);
         String accessToken = userAccessTokenHandler.createToken(privateClaims);
         String refreshToken = userRefreshTokenHandler.createToken(privateClaims);
-        redisHandler.setValues(String.valueOf(member.getId()), refreshToken);
-        return new SignInResponse(accessToken, refreshToken);
-    }
 
-    private void validatePassword(SignInRequest req, Member member) {
-        if(!passwordEncoder.matches(req.getPassword(), member.getPassword())) {
-            throw new LoginFailureException();
-        }
+        saveRefreshToken(String.valueOf(member.getId()), refreshToken);
+
+        TokenStorageUtil.addAccessTokenInHeader(response, accessToken);
+        TokenStorageUtil.addRefreshTokenInCookie(response, refreshToken, 24 * 60 * 60);
     }
 
     private TokenHandler.PrivateClaims createPrivateClaims(Member member) {
@@ -88,23 +90,40 @@ public class SignService {
                         .collect(Collectors.toList()));
     }
 
+    private void validatePassword(SignInRequest req, Member member) {
+        if(!passwordEncoder.matches(req.getPassword(), member.getPassword())) {
+            throw new LoginFailureException();
+        }
+    }
+
+    public void saveRefreshToken(String memberId, String refreshToken) {
+        refreshUserTokenService.save(memberId, refreshToken);
+    }
+
     @Transactional
-    public UserRefreshTokenResponse refreshToken(String userRefreshToken) {
+    public void signOut(SignOutRequest req) {
+        deleteRefreshToken(String.valueOf(req.getMemberId()));
+    }
+
+    public void deleteRefreshToken(String memberId)
+    {
+        refreshUserTokenService.delete(memberId);
+    }
+
+    @Transactional
+    public void refresh(String userRefreshToken, HttpServletResponse response) {
         TokenHandler.PrivateClaims userClaims = userRefreshTokenHandler.parse(userRefreshToken)
                 .orElseThrow(RefreshTokenFailureException::new);
-        String storedToken = Optional.ofNullable(redisHandler.getValues(userClaims.getId()))
-                .orElseThrow(RefreshTokenFailureException::new);
-
-        if (!storedToken.equals(userRefreshToken)) {
-            redisHandler.deleteValues(String.valueOf(userClaims.getId()));
-            throw new RefreshTokenFailureException();
+        if (validateRefreshToken(userRefreshToken, userClaims.getId())) {
+            String newUserAccessToken = userAccessTokenHandler.createToken(userClaims);
+            String newUserRefreshToken = userRefreshTokenHandler.createToken(userClaims);
+            saveRefreshToken(userClaims.getId(), newUserRefreshToken);
+            TokenStorageUtil.addAccessTokenInHeader(response, newUserAccessToken);
+            TokenStorageUtil.addRefreshTokenInCookie(response, newUserRefreshToken, 24 * 60 * 60);
         }
+    }
 
-        String newUserAccessToken = userAccessTokenHandler.createToken(userClaims);
-        String newUserRefreshToken = userRefreshTokenHandler.createToken(userClaims);
-
-        redisHandler.setValues(String.valueOf(userClaims.getId()), newUserRefreshToken);
-
-        return new UserRefreshTokenResponse(newUserAccessToken, newUserRefreshToken);
+    public boolean validateRefreshToken(String userRefreshToken, String memberId) {
+        return refreshUserTokenService.validate(userRefreshToken, memberId);
     }
 }

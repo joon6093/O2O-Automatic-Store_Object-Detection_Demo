@@ -2,9 +2,9 @@ package com.iia.store.controller.store;
 
 import com.iia.store.config.aop.AssignMemberId;
 import com.iia.store.config.response.Response;
-import com.iia.store.dto.sign.UserRefreshTokenResponse;
 import com.iia.store.dto.store.*;
 import com.iia.store.service.store.StoreService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,10 +43,10 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(response));
     }
 
-    @PostMapping("/stores/refresh-token")
-    public ResponseEntity<Response> refreshStoreToken(@Valid @RequestBody StoreRefreshTokenRequest req) {
-        StoreRefreshTokenResponse response = storeService.refreshStoreToken(req);
-        return ResponseEntity.status(HttpStatus.OK).body(Response.success(response));
+    @PostMapping("/stores/refresh")
+    public ResponseEntity<Response> storeRefresh(@Valid @RequestBody StoreRefreshTokenRequest req, HttpServletResponse response) {
+        storeService.storeRefresh(req, response);
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success());
     }
 
     @GetMapping("/stores")

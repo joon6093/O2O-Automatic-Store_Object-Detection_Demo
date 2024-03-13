@@ -1,11 +1,12 @@
 package com.iia.store.service.member;
 
-import com.iia.store.config.database.RedisHandler;
 import com.iia.store.config.exception.MemberNotFoundException;
-import com.iia.store.config.exception.ProductNotFoundException;
 import com.iia.store.dto.member.MemberDto;
 import com.iia.store.entity.member.Member;
+import com.iia.store.entity.token.RefreshUserToken;
 import com.iia.store.repository.member.MemberRepository;
+import com.iia.store.repository.token.RefreshUserTokenRepository;
+import com.iia.store.service.token.RefreshUserTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    private final RedisHandler redisHandler;
+    private final RefreshUserTokenService refreshUserTokenService;
 
     public MemberDto read(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
@@ -24,13 +25,13 @@ public class MemberService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(MemberNotFoundException::new);
-        Boolean exists = redisHandler.exists(String.valueOf(id));
-        if (exists != null && exists) {
-            redisHandler.deleteValues(String.valueOf(id));
-        }
+    public void delete(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         memberRepository.delete(member);
+        deleteRefreshToken(String.valueOf(memberId));
     }
 
+    public void deleteRefreshToken(String memberId){
+        refreshUserTokenService.delete(String.valueOf(memberId));
+    }
 }

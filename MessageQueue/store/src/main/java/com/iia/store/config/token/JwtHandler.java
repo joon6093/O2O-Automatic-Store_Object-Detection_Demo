@@ -1,4 +1,4 @@
-package com.iia.store.config.tocken;
+package com.iia.store.config.token;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;

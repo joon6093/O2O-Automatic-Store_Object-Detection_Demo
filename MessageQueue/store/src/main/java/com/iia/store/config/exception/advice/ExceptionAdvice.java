@@ -137,4 +137,11 @@ public class ExceptionAdvice {
                 .status(HttpStatus.NOT_FOUND)
                 .body(responseHandler.getFailureResponse(PRODUCT_NOT_FOUND_EXCEPTION));
     }
+
+    @ExceptionHandler(RefreshUserTokenNotFoundException.class)
+    public ResponseEntity<Response> refreshUserTokenNotFoundException() {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(responseHandler.getFailureResponse(REFRESH_USER_TOKEN_NOT_FOUND_EXCEPTION));
+    }
 }

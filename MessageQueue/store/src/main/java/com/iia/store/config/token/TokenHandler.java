@@ -1,4 +1,4 @@
-package com.iia.store.config.tocken;
+package com.iia.store.config.token;
 
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;

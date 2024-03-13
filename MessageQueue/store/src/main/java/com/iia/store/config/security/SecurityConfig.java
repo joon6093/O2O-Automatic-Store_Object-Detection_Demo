@@ -40,7 +40,8 @@ public class SecurityConfig {
                 .addFilterBefore(expiredJwtExceptionFilter, JwtUserAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize ->
                         authorize
-                        .requestMatchers(HttpMethod.POST, "/sign-in", "/sign-up","/refresh-token").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/sign-in", "/sign-up","/refresh").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/sign-out").hasAnyRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/members/**").hasAnyRole("USER","ADMIN")
                         .requestMatchers(HttpMethod.POST, "/stores","/stores/**").hasAnyRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/stores/**").hasAnyRole("USER","ADMIN")

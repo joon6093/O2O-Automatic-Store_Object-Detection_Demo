@@ -21,7 +21,8 @@ public enum ExceptionType {
     REFRESH_TOKEN_FAILURE_EXCEPTION("refreshTokenFailureException.code", "refreshTokenFailureException.msg"),
     STORE_NOT_FOUND_EXCEPTION("storeNotFoundException.code", "storeNotFoundException.msg"),
     SELECT_STORE_FAILURE_EXCEPTION("selectStoreFailureException.code", "selectStoreFailureException.msg"),
-    PRODUCT_NOT_FOUND_EXCEPTION("productNotFoundException.code", "productNotFoundException.msg");
+    PRODUCT_NOT_FOUND_EXCEPTION("productNotFoundException.code", "productNotFoundException.msg"),
+    REFRESH_USER_TOKEN_NOT_FOUND_EXCEPTION("refreshUserTokenNotFoundException.code", "refreshUserTokenNotFoundException.msg");
 
     private final String code;
     private final String message;

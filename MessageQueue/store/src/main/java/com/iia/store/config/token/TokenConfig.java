@@ -1,4 +1,4 @@
-package com.iia.store.config.tocken;
+package com.iia.store.config.token;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

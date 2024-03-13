@@ -1,6 +1,6 @@
 package com.iia.store.config.security;
 
-import com.iia.store.config.tocken.TokenHandler;
+import com.iia.store.config.token.TokenHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;

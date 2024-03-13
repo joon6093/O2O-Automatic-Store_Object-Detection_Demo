@@ -1,7 +1,8 @@
 package com.iia.store.service.store;
 
 import com.iia.store.config.exception.*;
-import com.iia.store.config.tocken.TokenHandler;
+import com.iia.store.config.token.TokenHandler;
+import com.iia.store.config.token.TokenStorageUtil;
 import com.iia.store.dto.image.ImageDto;
 import com.iia.store.dto.store.*;
 import com.iia.store.entity.member.Member;
@@ -15,6 +16,7 @@ import com.iia.store.repository.store.StoreRepository;
 import com.iia.store.service.image.ImageService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,18 +110,18 @@ public class StoreService {
                         .collect(Collectors.toList()));
     }
 
-    public StoreRefreshTokenResponse refreshStoreToken(StoreRefreshTokenRequest req) {
+    public void storeRefresh(StoreRefreshTokenRequest req, HttpServletResponse response) {
         String expiredStoreToken = req.getExpiredStoreToken();
+        String newStoreAccessToken = null;
         try {
             TokenHandler.PrivateClaims privateClaims = storeAccessTokenHandler.parse(expiredStoreToken).orElseThrow(RefreshTokenFailureException::new);
-            String newStoreAccessToken = storeAccessTokenHandler.createToken(privateClaims);
-            return new StoreRefreshTokenResponse(newStoreAccessToken);
+            newStoreAccessToken = storeAccessTokenHandler.createToken(privateClaims);
         } catch (ExpiredJwtException e) {
             Claims claims = e.getClaims();
             TokenHandler.PrivateClaims privateClaims = storeAccessTokenHandler.convert(claims);
-            String newStoreAccessToken = storeAccessTokenHandler.createToken(privateClaims);
-            return new StoreRefreshTokenResponse(newStoreAccessToken);
+            newStoreAccessToken = storeAccessTokenHandler.createToken(privateClaims);
         }
+        TokenStorageUtil.addAccessTokenInHeader(response, newStoreAccessToken);
     }
 
     public StoreListDto readAll() {
