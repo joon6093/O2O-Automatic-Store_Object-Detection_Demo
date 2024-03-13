@@ -26,3 +26,8 @@ O2O 자동 상점 시스템 구현을 위한 Spring과 YOLOv8기반 Flask로 구
 ![image](https://github.com/joon6093/O2O-Automatic-Store_Object-Detection_Demo/assets/118044367/b10aab05-a1ee-4832-b627-0d5d3011e70c)
 
 [Spring Cloud 적용을 위한 분석](https://velog.io/@joon6093/%EC%9D%BC%EB%8B%A8-%EB%B0%95%EC%A3%A0-O2O-Object-Detection-%EC%84%9C%EB%B2%84-Spring-Cloud-%EC%A0%81%EC%9A%A9%EC%9D%84-%EC%9C%84%ED%95%9C-%EB%B6%84%EC%84%9D)
+
+### Redis?
+![image](https://github.com/joon6093/O2O-Automatic-Store_Object-Detection_Demo/assets/118044367/1a32ae98-d0a9-4c38-9f3c-93739c12d7e9)
+
+[Redis 사용에 대한 분석](https://velog.io/@joon6093/%EC%9D%BC%EB%8B%A8-%EB%B0%95%EC%A3%A0-O2O-Object-Detection-%EC%84%9C%EB%B2%84-Redis-%EC%82%AC%EC%9A%A9%EC%97%90-%EB%8C%80%ED%95%9C-%EB%B6%84%EC%84%9D)
