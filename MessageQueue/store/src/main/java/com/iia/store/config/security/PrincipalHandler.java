@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PrincipalHandler {
 
-    public static Long extractMemberId() {
-        return Long.valueOf(getUserDetails().getUserId());
+    public static Long extractId() {
+        return Long.valueOf(getUserDetails().getUsername());
     }
 
-    public static Set<RoleType> extractMemberRoles() {
+    public static Set<RoleType> extractRoles() {
         return getUserDetails().getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)

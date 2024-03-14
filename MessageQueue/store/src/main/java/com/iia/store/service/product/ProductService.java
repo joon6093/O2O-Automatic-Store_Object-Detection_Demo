@@ -11,6 +11,8 @@ import com.iia.store.repository.product.ProductRepository;
 import com.iia.store.repository.store.StoreRepository;
 import com.iia.store.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,7 +51,8 @@ public class ProductService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    @PreAuthorize("@productGuard.check(#id)")
+    public void delete(@Param("id")Long id) {
         Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
         deleteImages(product.getImages());
         product.removeImages(product.getImages());

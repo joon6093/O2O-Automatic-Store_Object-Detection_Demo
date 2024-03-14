@@ -1,11 +1,11 @@
 package com.iia.store.config.exception.advice;
 
 import com.iia.store.config.exception.*;
+import com.iia.store.config.exception.response.ResponseHandler;
 import com.iia.store.config.response.Response;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.iia.store.config.exception.response.ResponseHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,8 +13,9 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
+
 import static com.iia.store.config.exception.type.ExceptionType.*;
-import static com.iia.store.config.exception.type.ExceptionType.IMAGE_DELETE_FAILURE_EXCEPTION;
 
 
 @RestControllerAdvice
@@ -30,6 +31,14 @@ public class ExceptionAdvice {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(responseHandler.getFailureResponse(EXCEPTION));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class) // @PreAuthorize으로 부터 발생하는 오류
+    public ResponseEntity<Response> accessDeniedException(AccessDeniedException e) {
+        log.info("e = {}", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(responseHandler.getFailureResponse(ACCESS_DENIED_EXCEPTION));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtUserAuthenticationFilter jwtUserAuthenticationFilter;
@@ -46,9 +48,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/stores","/stores/**").hasAnyRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/stores/**").hasAnyRole("USER","ADMIN")
                         .requestMatchers(HttpMethod.GET, "/stores/sign-in").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("NORMAL","SPECIAL")
-                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasAnyRole("NORMAL","SPECIAL")
-                        .requestMatchers(HttpMethod.PUT, "/products/**").hasAnyRole("NORMAL","SPECIAL")
+                        .requestMatchers(HttpMethod.POST, "/products").hasAnyRole("NORMAL")
+                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasAnyRole("NORMAL")
+                        .requestMatchers(HttpMethod.PUT, "/products/**").hasAnyRole("NORMAL")
                         .requestMatchers(HttpMethod.GET).permitAll()
                         .anyRequest().hasAnyRole("ADMIN"));
         return http.build();

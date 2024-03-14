@@ -17,7 +17,7 @@ public class AssignMemberIdAspect {
     public void assignMemberId(JoinPoint joinPoint) {
         Arrays.stream(joinPoint.getArgs())
                 .forEach(arg -> getMethod(arg.getClass())
-                        .ifPresent(setMemberId -> invokeMethod(setMemberId, arg, PrincipalHandler.extractMemberId())));
+                        .ifPresent(setMemberId -> invokeMethod(setMemberId, arg, PrincipalHandler.extractId())));
     }
 
     private Optional<Method> getMethod(Class<?> clazz) {

@@ -18,6 +18,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,7 +70,8 @@ public class StoreService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    @PreAuthorize("@storeGuard.check(#id)")
+    public void delete(@Param("id")Long id) {
         Store store = storeRepository.findById(id).orElseThrow(StoreNotFoundException::new);
         deleteImage(store.getImage());
         storeRepository.delete(store);
